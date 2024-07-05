@@ -1,0 +1,41 @@
+import sqlite3
+import os
+
+
+def create_connection(db_name):
+    db_path = os.path.join("static", "db", f"{db_name}.db")
+    conn = sqlite3.connect(db_path)
+    return conn
+
+
+def create_user_tables(conn):
+    c = conn.cursor()
+    c.execute(
+        """
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL
+    )
+    """
+    )
+    conn.commit()
+
+
+def create_diary_tables(conn):
+    c = conn.cursor()
+    c.execute(
+        """
+    CREATE TABLE IF NOT EXISTS diaries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        date TIMESTAMP NOT NULL,
+        icon TEXT NOT NULL,
+        content TEXT NOT NULL,
+        active_start INTEGER NOT NULL,
+        active_end INTEGER NOT NULL,
+        create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """
+    )
+    conn.commit()
