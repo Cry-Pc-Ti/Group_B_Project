@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import streamlit as st
 from events.database import create_connection, create_user_tables, create_diary_tables
 from events.diary_operations import get_diary_by_date
@@ -25,7 +25,7 @@ st.markdown(
             color: inherit !important;
         }
         div[data-testid="stSidebarContent"] button:hover {
-            color: rgb(255, 75, 75) !important;
+            color: #FF4B4B !important;
         }
     </style>
     """,
@@ -40,7 +40,7 @@ def run_app():
         st.session_state["current_screen"] = "ログイン"
 
     if "selected_date" not in st.session_state:
-        st.session_state["selected_date"] = datetime.datetime.now()
+        st.session_state["selected_date"] = datetime.now().date()
 
     # ログイン画面以外でサイドバーを表示
     if "user_id" in st.session_state:
@@ -51,7 +51,8 @@ def run_app():
                 st.session_state["current_screen"] = label
 
                 if label == "日記登録":
-                    st.session_state["selected_date"] = datetime.datetime.now()
+                    # 日記登録画面に遷移する際に日付を今日にリセット
+                    st.session_state["selected_date"] = datetime.now().date()
 
     if st.session_state["current_screen"] == "ログイン":
         login_screen(user_conn)
@@ -60,14 +61,14 @@ def run_app():
         register_screen(user_conn)
 
     elif st.session_state["current_screen"] == "日記登録":
-        add_diary_screen(diary_conn, st.session_state["selected_date"])
+        add_diary_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "カレンダー":
         diary_calendar_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "日記詳細":
         if "selected_date" in st.session_state:
-            view_diary_screen(diary_conn, st.session_state["selected_date"])
+            view_diary_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "週間分析":
         weekly_analysis_screen(diary_conn)

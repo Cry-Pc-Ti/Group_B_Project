@@ -32,8 +32,8 @@ def create_diary_tables(conn):
         date TIMESTAMP NOT NULL,
         icon TEXT NOT NULL,
         content TEXT NOT NULL,
-        active_start INTEGER NOT NULL,
-        active_end INTEGER NOT NULL,
+        sleep_start TIMESTAMP NOT NULL,
+        sleep_end TIMESTAMP NOT NULL,
         create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """
