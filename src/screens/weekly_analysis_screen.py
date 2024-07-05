@@ -11,11 +11,6 @@ def weekly_analysis_screen(conn):
 
         st.title("週間分析")
 
-        # セッション状態に選択された週の初めの日付を保持
-        if "start_of_week" not in st.session_state:
-            today = datetime.now()
-            st.session_state["start_of_week"] = today - timedelta(days=today.weekday() + 1)
-
         # 選択された週の初めの日付
         start_of_week = st.session_state["start_of_week"]
 

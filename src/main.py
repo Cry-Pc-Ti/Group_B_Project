@@ -1,9 +1,8 @@
-from datetime import datetime
 import streamlit as st
+from datetime import datetime, timedelta
 from events.database import create_connection, create_user_tables, create_diary_tables
-from events.diary_operations import get_diary_by_date
-from screens.register_screen import register_screen
 from screens.login_screen import login_screen
+from screens.register_screen import register_screen
 from screens.add_diary_screen import add_diary_screen
 from screens.view_diary_screen import view_diary_screen
 from screens.calendar_screen import diary_calendar_screen
@@ -42,6 +41,10 @@ def run_app():
     if "selected_date" not in st.session_state:
         st.session_state["selected_date"] = datetime.now().date()
 
+    if "start_of_week" not in st.session_state:
+        today = datetime.now()
+        st.session_state["start_of_week"] = today - timedelta(days=today.weekday() + 1)
+
     # ログイン画面以外でサイドバーを表示
     if "user_id" in st.session_state:
         button_labels = ["日記登録", "カレンダー", "週間分析", "ログアウト"]
@@ -50,9 +53,13 @@ def run_app():
             if st.sidebar.button(label):
                 st.session_state["current_screen"] = label
 
+                # 日記登録画面に遷移する際に日付を今日にリセット
                 if label == "日記登録":
-                    # 日記登録画面に遷移する際に日付を今日にリセット
                     st.session_state["selected_date"] = datetime.now().date()
+
+                # 週間分析画面に遷移する際に週の初めの日付を今週の月曜日にリセット
+                elif label == "週間分析":
+                    st.session_state["start_of_week"] = datetime.now() - timedelta(days=datetime.now().weekday() + 1)
 
     if st.session_state["current_screen"] == "ログイン":
         login_screen(user_conn)
