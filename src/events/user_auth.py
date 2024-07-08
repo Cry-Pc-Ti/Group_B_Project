@@ -2,9 +2,9 @@ import sqlite3
 
 
 def register_user(conn, user_id, password):
-    c = conn.cursor()
+    cur = conn.cursor()
     try:
-        c.execute("INSERT INTO users (user, password) VALUES (?, ?)", (user_id, password))
+        cur.execute("INSERT INTO users (user, password) VALUES (?, ?)", (user_id, password))
         conn.commit()
         return True
     except sqlite3.IntegrityError:
@@ -12,9 +12,9 @@ def register_user(conn, user_id, password):
 
 
 def login_user(conn, user_id, password):
-    c = conn.cursor()
-    c.execute("SELECT id FROM users WHERE user=? AND password=?", (user_id, password))
-    user = c.fetchone()
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM users WHERE user=? AND password=?", (user_id, password))
+    user = cur.fetchone()
     if user:
         return user[0]
     else:

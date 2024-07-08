@@ -9,8 +9,8 @@ def create_connection(db_name):
 
 
 def create_user_tables(conn):
-    c = conn.cursor()
-    c.execute(
+    cur = conn.cursor()
+    cur.execute(
         """
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,8 +23,8 @@ def create_user_tables(conn):
 
 
 def create_diary_tables(conn):
-    c = conn.cursor()
-    c.execute(
+    cur = conn.cursor()
+    cur.execute(
         """
     CREATE TABLE IF NOT EXISTS diaries (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

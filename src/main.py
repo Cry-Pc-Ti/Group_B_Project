@@ -1,3 +1,4 @@
+from PIL import Image
 import streamlit as st
 from datetime import datetime, timedelta
 from events.database import create_connection, create_user_tables, create_diary_tables
@@ -7,6 +8,9 @@ from screens.add_diary_screen import add_diary_screen
 from screens.view_diary_screen import view_diary_screen
 from screens.calendar_screen import diary_calendar_screen
 from screens.weekly_analysis_screen import weekly_analysis_screen
+
+icon = Image.open("static/img/icon.png")
+st.set_page_config(page_title=":)iary", page_icon=icon)
 
 # データベース接続とテーブル作成
 user_conn = create_connection("user")
