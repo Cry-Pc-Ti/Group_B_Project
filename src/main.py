@@ -53,8 +53,8 @@ def run_app():
             if st.sidebar.button(label):
                 st.session_state["current_screen"] = label
 
-                # 日記登録画面に遷移する際に日付を今日にリセット
                 if label == "日記登録":
+                    # 日記登録画面に遷移する際に日付を今日にリセット
                     st.session_state["selected_date"] = datetime.now().date()
 
                 # 週間分析画面に遷移する際に週の初めの日付を今週の月曜日にリセット
@@ -74,8 +74,7 @@ def run_app():
         diary_calendar_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "日記詳細":
-        if "selected_date" in st.session_state:
-            view_diary_screen(diary_conn)
+        view_diary_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "週間分析":
         weekly_analysis_screen(diary_conn)

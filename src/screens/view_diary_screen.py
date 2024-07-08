@@ -1,5 +1,5 @@
-from datetime import datetime, time, timedelta
 import streamlit as st
+from datetime import datetime, time, timedelta
 from events.diary_operations import get_diary_by_date
 
 st.markdown(
@@ -61,9 +61,9 @@ def view_diary_screen(conn):
 
             col1, col2 = st.columns(2)
             with col1:
-                st.time_input("就寝時間", value=time(sleep_start.hour, sleep_start.minute), step=timedelta(minutes=30))
+                st.time_input("就寝", value=time(sleep_start.hour, sleep_start.minute), step=timedelta(minutes=30))
             with col2:
-                st.time_input("起床時間", value=time(sleep_end.hour, sleep_end.minute), step=timedelta(minutes=30))
+                st.time_input("起床", value=time(sleep_end.hour, sleep_end.minute), step=timedelta(minutes=30))
 
     else:
         st.error("ログインしてください")

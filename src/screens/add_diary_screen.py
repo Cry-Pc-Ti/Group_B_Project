@@ -39,9 +39,9 @@ def add_diary_screen(conn):
 
         col1, col2 = st.columns(2)
         with col1:
-            selected_sleep_start = st.time_input("就寝時間", value=time(22, 0), step=timedelta(minutes=30))
+            selected_sleep_start = st.time_input("就寝", value=time(22, 0), step=timedelta(minutes=30))
         with col2:
-            selected_sleep_end = st.time_input("起床時間", value=time(6, 0), step=timedelta(minutes=30))
+            selected_sleep_end = st.time_input("起床", value=time(7, 0), step=timedelta(minutes=30))
 
         # 就寝時間を日時に変換
         sleep_start = datetime.combine(selected_date, selected_sleep_start)

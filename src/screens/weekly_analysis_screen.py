@@ -1,8 +1,8 @@
 import streamlit as st
+from datetime import timedelta
 import matplotlib.pyplot as plt
-from events.diary_operations import get_diary_entries
-from datetime import datetime, timedelta
 import locale
+from events.diary_operations import get_diary_entries
 
 
 def weekly_analysis_screen(conn):

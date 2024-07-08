@@ -1,7 +1,7 @@
 import streamlit as st
-from events.diary_operations import get_diary_entries, get_diary_by_date
 import streamlit_calendar as st_calendar
 from datetime import datetime, timedelta
+from events.diary_operations import get_diary_entries, get_diary_by_date
 
 
 def diary_calendar_screen(conn):
