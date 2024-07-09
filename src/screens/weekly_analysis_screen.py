@@ -1,7 +1,7 @@
 import streamlit as st
-from datetime import timedelta
 import matplotlib.pyplot as plt
 import locale
+from datetime import timedelta
 from events.diary_operations import get_diary_entries
 
 

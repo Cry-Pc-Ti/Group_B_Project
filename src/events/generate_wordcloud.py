@@ -1,7 +1,7 @@
 import streamlit as st
-from wordcloud import WordCloud
-from janome.tokenizer import Tokenizer
 import matplotlib.pyplot as plt
+from janome.tokenizer import Tokenizer
+from wordcloud import WordCloud
 
 
 def load_stopwords():
