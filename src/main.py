@@ -8,17 +8,18 @@ from screens.add_diary_screen import add_diary_screen
 from screens.view_diary_screen import view_diary_screen
 from screens.calendar_screen import diary_calendar_screen
 from screens.weekly_analysis_screen import weekly_analysis_screen
+from screens.word_cloud_screen import word_cloud_screen
 
-icon = Image.open("static/img/icon.png")
-st.set_page_config(page_title=":)iary", page_icon=icon)
+# タイトルとアイコンの設定
+# エラーが出るときがあるので、要修正
+# st.set_page_config(page_title=":)iary", page_icon=Image.open("static/img/icon.png"))
 
 # データベース接続とテーブル作成
 user_conn = create_connection("user")
 create_user_tables(user_conn)
-
 diary_conn = create_connection("diary")
 create_diary_tables(diary_conn)
-
+# サイドバーのボタンスタイルの設定
 st.markdown(
     """
     <style>
@@ -51,7 +52,7 @@ def run_app():
 
     # ログイン画面以外でサイドバーを表示
     if "user_id" in st.session_state:
-        button_labels = ["日記登録", "カレンダー", "週間分析", "ログアウト"]
+        button_labels = ["日記登録", "カレンダー", "週間分析", "ワードクラウド", "ログアウト"]
 
         for label in button_labels:
             if st.sidebar.button(label):
@@ -61,8 +62,8 @@ def run_app():
                     # 日記登録画面に遷移する際に日付を今日にリセット
                     st.session_state["selected_date"] = datetime.now().date()
 
-                # 週間分析画面に遷移する際に週の初めの日付を今週の月曜日にリセット
-                elif label == "週間分析":
+                # 週間分析画面に遷移する際に週初めの日付を今週日曜日の日付にリセット
+                elif label == "週間分析" or label == "ワードクラウド":
                     st.session_state["start_of_week"] = datetime.now() - timedelta(days=datetime.now().weekday() + 1)
 
     if st.session_state["current_screen"] == "ログイン":
@@ -82,6 +83,9 @@ def run_app():
 
     elif st.session_state["current_screen"] == "週間分析":
         weekly_analysis_screen(diary_conn)
+
+    elif st.session_state["current_screen"] == "ワードクラウド":
+        word_cloud_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "ログアウト":
         st.session_state.clear()
