@@ -33,7 +33,7 @@ def add_diary_screen(conn):
 
         # 日記の内容を入力
         st.title(selected_date.strftime("%Y/%m/%d"))
-        icon = st.selectbox("感情", ["🥰", "😊", "😑", "😥", "😓"])
+        icon = st.selectbox("感情", ["🥰", "😊", "😑", "😓", "😥"])
 
         content = st.text_area("内容")
 
