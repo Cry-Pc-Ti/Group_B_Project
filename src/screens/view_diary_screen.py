@@ -1,5 +1,6 @@
 import streamlit as st
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
+from sqlite3 import Connection
 from events.diary_operations import get_diary_by_date
 
 st.markdown(
@@ -17,17 +18,17 @@ st.markdown(
 )
 
 
-def view_diary_screen(conn):
+def view_diary_screen(conn: Connection):
     if "user_id" in st.session_state:
-        user_id = st.session_state["user_id"]
-        selected_date = st.session_state["selected_date"]
+        user_id: int = st.session_state["user_id"]
+        selected_date: date = st.session_state["selected_date"]
         today = datetime.now().date()
 
         # 日記がすでに存在するかチェック
-        existing_diary = get_diary_by_date(conn, user_id, selected_date.strftime("%Y-%m-%d"))
+        existing_diary = get_diary_by_date(conn, user_id, selected_date)
         if not existing_diary:
             st.session_state["current_screen"] = "日記登録"
-            st.experimental_rerun()
+            st.rerun()
 
         # ボタンを配置
         col1, col2, col3 = st.columns([6, 1, 1])
@@ -38,12 +39,12 @@ def view_diary_screen(conn):
         with col2:
             if st.button("前の日"):
                 st.session_state["selected_date"] -= timedelta(days=1)
-                st.experimental_rerun()
+                st.rerun()
         with col3:
             if selected_date < today:
                 if st.button("次の日"):
                     st.session_state["selected_date"] += timedelta(days=1)
-                    st.experimental_rerun()
+                    st.rerun()
 
         # 日記の内容を表示
         st.title(selected_date.strftime("%Y/%m/%d"))
@@ -51,13 +52,13 @@ def view_diary_screen(conn):
         diary = get_diary_by_date(conn, user_id, selected_date)
         if diary:
             emoji = ["🥰", "😊", "😑", "😥", "😓"]
-            selected_emoji = emoji.index(diary["icon"])
+            selected_emoji = emoji.index(diary.icon)
             st.selectbox("感情", ["🥰", "😊", "😑", "😥", "😓"], index=selected_emoji)
 
-            st.text_area("内容", value=diary["content"])
+            st.text_area("内容", value=diary.content)
 
-            sleep_start = diary["sleep_start"]
-            sleep_end = diary["sleep_end"]
+            sleep_start = diary.sleep_start
+            sleep_end = diary.sleep_end
 
             col1, col2 = st.columns(2)
             with col1:
@@ -68,7 +69,7 @@ def view_diary_screen(conn):
     else:
         st.error("ログインしてください")
         st.session_state["current_screen"] = "ログイン"
-        st.experimental_rerun()
+        st.rerun()
 
 
 def back_to_calendar():

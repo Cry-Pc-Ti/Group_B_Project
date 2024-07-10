@@ -1,19 +1,20 @@
 import streamlit as st
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
+from models.diary import Diary
 from events.diary_operations import add_diary_entry, get_diary_by_date
 
 
 def add_diary_screen(conn):
     if "user_id" in st.session_state:
-        user_id = st.session_state["user_id"]
-        selected_date = st.session_state["selected_date"]
+        user_id: int = st.session_state["user_id"]
+        selected_date: date = st.session_state["selected_date"]
         today = datetime.now().date()
 
         # 日記がすでに存在するかチェック
-        existing_diary = get_diary_by_date(conn, user_id, selected_date.strftime("%Y-%m-%d"))
+        existing_diary = get_diary_by_date(conn, user_id, selected_date)
         if existing_diary:
             st.session_state["current_screen"] = "日記詳細"
-            st.experimental_rerun()
+            st.rerun()
 
         # ボタンを配置
         col1, col2, col3 = st.columns([6, 1, 1])
@@ -24,15 +25,16 @@ def add_diary_screen(conn):
         with col2:
             if st.button("前の日"):
                 st.session_state["selected_date"] -= timedelta(days=1)
-                st.experimental_rerun()
+                st.rerun()
         with col3:
             if selected_date < today:
                 if st.button("次の日"):
                     st.session_state["selected_date"] += timedelta(days=1)
-                    st.experimental_rerun()
+                    st.rerun()
 
         # 日記の内容を入力
         st.title(selected_date.strftime("%Y/%m/%d"))
+
         icon = st.selectbox("感情", ["🥰", "😊", "😑", "😓", "😥"])
 
         content = st.text_area("内容")
@@ -59,32 +61,41 @@ def add_diary_screen(conn):
             # 感情アイコン未入力
             if not icon:
                 st.error("感情を選択してください")
+                register_flag = False
+
             # 内容未入力
             elif not content:
                 st.error("内容を入力してください")
+                register_flag = False
+
             # 就寝時間より起床時間が前の場合はエラーを出力
             elif sleep_start >= sleep_end:
                 st.error("就寝時間は起床時間より前に設定してください")
+                register_flag = False
+
             else:
                 register_flag = True
 
             if register_flag:
-                add_diary_entry(
-                    conn,
-                    user_id,
-                    selected_date,
-                    icon,
-                    content,
-                    sleep_start,
-                    sleep_end,
+                diary = Diary(
+                    id=None,
+                    user_id=user_id,
+                    date=selected_date,
+                    icon=icon,
+                    content=content,
+                    sleep_start=sleep_start,
+                    sleep_end=sleep_end,
+                    create_at=None,
                 )
+
+                add_diary_entry(conn, diary)
                 st.session_state["current_screen"] = "カレンダー"
                 st.rerun()
 
     else:
         st.error("ログインしてください")
         st.session_state["current_screen"] = "ログイン"
-        st.experimental_rerun()
+        st.rerun()
 
 
 def back_to_calendar():

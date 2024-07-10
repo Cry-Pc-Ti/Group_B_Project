@@ -1,18 +1,19 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import locale
-from datetime import timedelta
-from events.diary_operations import get_diary_entries
+from datetime import date, timedelta
+from sqlite3 import Connection
+from events.diary_operations import get_diary_by_date
 
 
-def weekly_analysis_screen(conn):
+def weekly_analysis_screen(conn: Connection):
     if "user_id" in st.session_state:
         user_id = st.session_state["user_id"]
 
         st.title("週間分析")
 
         # 選択された週の初めの日付
-        start_of_week = st.session_state["start_of_week"]
+        start_of_week: date = st.session_state["start_of_week"]
 
         # 週を前後に移動するためのボタン
         col1, col2, col3 = st.columns([8, 1.5, 2])
@@ -30,25 +31,28 @@ def weekly_analysis_screen(conn):
         with st.spinner("分析中..."):
             # 今週の各日付を取得
             locale.setlocale(locale.LC_TIME, "en_US.utf8")
-            dates = [start_of_week + timedelta(days=i) for i in range(7)]
-            format_dates = [date.strftime("%m/%d") + "\n(" + date.strftime("%a") + ")" for date in dates]
-
-            # 日記エントリーを辞書型のリストとして取得
-            diaries = get_diary_entries(conn, user_id)
-
-            # 感情評価のためのマッピング
-            icon_to_score = {"🥰": 5, "😊": 4, "😑": 3, "😥": 2, "😓": 1}
+            week_days = [start_of_week + timedelta(days=i) for i in range(7)]
+            format_dates = [date.strftime("%m/%d") + "\n(" + date.strftime("%a") + ")" for date in week_days]
 
             # データの整形
             scores = []
             sleep_times = []
 
-            for date in dates:
-                diary = next((diary for diary in diaries if diary["date"].date() == date.date()), None)
+            for day in week_days:
+                # DBから日記を取得
+                diary = get_diary_by_date(conn, user_id, day)
+
+                # 日記が存在する場合は、感情評価と睡眠時間を取得
                 if diary:
-                    scores.append(icon_to_score[diary["icon"]])
-                    sleep_duration = diary["sleep_end"] - diary["sleep_start"]
+                    # 感情評価
+                    icon_to_score = {"🥰": 5, "😊": 4, "😑": 3, "😥": 2, "😓": 1}
+                    scores.append(icon_to_score[diary.icon])
+
+                    # 睡眠時間
+                    sleep_duration = diary.sleep_end - diary.sleep_start
                     sleep_times.append(sleep_duration.total_seconds() / 3600.0)  # 時間に変換
+
+                # 日記が存在しない場合は、0を追加
                 else:
                     scores.append(0)
                     sleep_times.append(0)

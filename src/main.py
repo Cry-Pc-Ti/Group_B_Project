@@ -1,4 +1,3 @@
-from PIL import Image
 import streamlit as st
 from datetime import datetime, timedelta
 from events.database import create_connection, create_user_tables, create_diary_tables
@@ -8,7 +7,7 @@ from screens.add_diary_screen import add_diary_screen
 from screens.view_diary_screen import view_diary_screen
 from screens.calendar_screen import diary_calendar_screen
 from screens.weekly_analysis_screen import weekly_analysis_screen
-from screens.word_cloud_screen import word_cloud_screen
+from screens.wordcloud_screen import wordcloud_screen
 
 # タイトルとアイコンの設定
 # エラーが出るときがあるので、要修正
@@ -17,8 +16,10 @@ from screens.word_cloud_screen import word_cloud_screen
 # データベース接続とテーブル作成
 user_conn = create_connection("user")
 create_user_tables(user_conn)
+
 diary_conn = create_connection("diary")
 create_diary_tables(diary_conn)
+
 # サイドバーのボタンスタイルの設定
 st.markdown(
     """
@@ -64,7 +65,8 @@ def run_app():
 
                 # 週間分析画面に遷移する際に週初めの日付を今週日曜日の日付にリセット
                 elif label == "週間分析" or label == "ワードクラウド":
-                    st.session_state["start_of_week"] = datetime.now() - timedelta(days=datetime.now().weekday() + 1)
+                    today = datetime.now()
+                    st.session_state["start_of_week"] = (today - timedelta(days=today.weekday() + 1)).date()
 
     if st.session_state["current_screen"] == "ログイン":
         login_screen(user_conn)
@@ -85,7 +87,7 @@ def run_app():
         weekly_analysis_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "ワードクラウド":
-        word_cloud_screen(diary_conn)
+        wordcloud_screen(diary_conn)
 
     elif st.session_state["current_screen"] == "ログアウト":
         st.session_state.clear()

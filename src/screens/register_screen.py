@@ -1,8 +1,9 @@
 import streamlit as st
+from sqlite3 import Connection
 from events.user_auth import register_user
 
 
-def register_screen(conn):
+def register_screen(conn: Connection):
     st.title("ユーザ登録")
 
     user_id = st.text_input("ID")

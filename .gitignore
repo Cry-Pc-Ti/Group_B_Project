@@ -1,3 +1,2 @@
-src/events/__pycache__/
-src/screens/__pycache__/
+__pycache__/
 static/db/

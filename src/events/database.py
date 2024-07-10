@@ -2,13 +2,13 @@ import os
 import sqlite3
 
 
-def create_connection(db_name):
+def create_connection(db_name: str):
     db_path = os.path.join("static", "db", f"{db_name}.db")
     conn = sqlite3.connect(db_path)
     return conn
 
 
-def create_user_tables(conn):
+def create_user_tables(conn: sqlite3.Connection):
     cur = conn.cursor()
     cur.execute(
         """
@@ -22,7 +22,7 @@ def create_user_tables(conn):
     conn.commit()
 
 
-def create_diary_tables(conn):
+def create_diary_tables(conn: sqlite3.Connection):
     cur = conn.cursor()
     cur.execute(
         """

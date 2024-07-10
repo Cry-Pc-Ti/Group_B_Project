@@ -1,8 +1,9 @@
 import streamlit as st
+from sqlite3 import Connection
 from events.user_auth import login_user
 
 
-def login_screen(conn):
+def login_screen(conn: Connection):
     st.title("ログイン")
 
     # ユーザ登録ボタンを右上に配置
@@ -18,7 +19,7 @@ def login_screen(conn):
     password = st.text_input("パスワード", type="password")
 
     if st.button("ログイン"):
-        user_id = login_user(conn, user_id, password)
+        user_id: int = login_user(conn, user_id, password)
         if user_id:
             st.session_state["user_id"] = user_id
             st.session_state["current_screen"] = "日記登録"

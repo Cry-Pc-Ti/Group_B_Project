@@ -1,4 +1,3 @@
-import streamlit as st
 import matplotlib.pyplot as plt
 from janome.tokenizer import Tokenizer
 from wordcloud import WordCloud
@@ -11,10 +10,6 @@ def load_stopwords():
 
 
 def generate_wordcloud(weekly_content: str):
-    if not weekly_content:
-        st.warning("今週の日記がありません")
-        return
-
     word_list = []
 
     token = Tokenizer()
