@@ -51,9 +51,9 @@ def view_diary_screen(conn: Connection):
 
         diary = get_diary_by_date(conn, user_id, selected_date)
         if diary:
-            emoji = ["🥰", "😊", "😑", "😥", "😓"]
-            selected_emoji = emoji.index(diary.icon)
-            st.selectbox("感情", ["🥰", "😊", "😑", "😥", "😓"], index=selected_emoji)
+            emoji_list = ["🥰", "😊", "😑", "😓", "😥"]
+            selected_emoji = emoji_list.index(diary.icon)
+            st.selectbox("感情", options=emoji_list, index=selected_emoji)
 
             st.text_area("内容", value=diary.content)
 
