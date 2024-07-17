@@ -68,6 +68,11 @@ def add_diary_screen(conn):
                 st.error("内容を入力してください")
                 register_flag = False
 
+            # 就寝時間と起床時間が同じ場合はエラーを出力
+            elif selected_sleep_start == selected_sleep_end:
+                st.error("就寝時間と起床時間が同じです")
+                register_flag = False
+
             # 就寝時間より起床時間が前の場合はエラーを出力
             elif sleep_start >= sleep_end:
                 st.error("就寝時間は起床時間より前に設定してください")

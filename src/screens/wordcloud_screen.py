@@ -45,6 +45,12 @@ def wordcloud_screen(conn):
         if weekly_content:
             # ワードクラウドを作成・表示
             wordcloud = generate_wordcloud(weekly_content)
+
+            # 名詞が含まれていない場合は警告を表示
+            if wordcloud is None:
+                st.warning("解析できませんでした")
+                st.stop()
+
             is_loaded = True
 
         else:

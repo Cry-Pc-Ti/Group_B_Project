@@ -18,8 +18,13 @@ def generate_wordcloud(weekly_content: str):
         if word_type in "名詞":
             word_list.append(token.surface)
 
+    # 抽出した名詞を空白区切りで連結
     word_chain = " ".join(word_list)
 
+    if not word_chain:
+        return None
+
+    # 解析禁止ワードの読み込み
     noun_stopwords = load_stopwords()
 
     # ワードクラウドの作成

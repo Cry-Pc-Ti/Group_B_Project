@@ -11,8 +11,16 @@ from screens.calendar_screen import diary_calendar_screen
 from screens.weekly_analysis_screen import weekly_analysis_screen
 from screens.wordcloud_screen import wordcloud_screen
 
-# タイトルとアイコンの設定
-# st.set_page_config(page_title=":)iary", page_icon=Image.open("static/img/icon.png"), initial_sidebar_state="auto")
+# グローバル変数を使用して、初回実行フラグを管理
+if "INITIAL_RUN" not in globals():
+    INITIAL_RUN = True
+else:
+    INITIAL_RUN = False
+
+# 初回実行時のみ設定するコード
+if INITIAL_RUN:
+    st.set_page_config(page_title=":)iary", page_icon=Image.open("static/img/icon.png"), initial_sidebar_state="auto")
+    INITIAL_RUN = False
 
 # データベース接続とテーブル作成
 user_conn = create_connection("user")
@@ -24,16 +32,16 @@ create_diary_tables(diary_conn)
 # サイドバーのボタンスタイルの設定
 st.markdown(
     """
-    <style>
-        div[data-testid="stSidebarContent"] button {
-            background-color: transparent !important;
-            border: none !important;
-            color: inherit !important;
-        }
-        div[data-testid="stSidebarContent"] button:hover {
-            color: #FF4B4B !important;
-        }
-    </style>
+        <style>
+            div[data-testid="stSidebarContent"] button {
+                background-color: transparent !important;
+                border: none !important;
+                color: inherit !important;
+            }
+            div[data-testid="stSidebarContent"] button:hover {
+                color: #FF4B4B !important;
+            }
+        </style>
     """,
     unsafe_allow_html=True,
 )

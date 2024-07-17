@@ -7,7 +7,7 @@ from typing import Any, List, Dict
 from events.diary_operations import get_diary_entries, get_diary_by_date
 
 
-def diary_calendar_screen(conn: Connection) -> None:
+def diary_calendar_screen(conn: Connection):
     if "user_id" in st.session_state:
         user_id: int = st.session_state["user_id"]
 
@@ -28,17 +28,17 @@ def diary_calendar_screen(conn: Connection) -> None:
             )
 
         css = """
-            <style>
-                .fc {}
-                .fc-direction-ltr {
-                    text-align: center;
-                }
-                .fc-event-title-container {}
-                .fc-event-title {
-                    font-size: 45px;
-                }
-            </style>
-            """
+                <style>
+                    .fc {}
+                    .fc-direction-ltr {
+                        text-align: center;
+                    }
+                    .fc-event-title-container {}
+                    .fc-event-title {
+                        font-size: 45px;
+                    }
+                </style>
+              """
 
         # カレンダー表示
         st.title("カレンダー")
