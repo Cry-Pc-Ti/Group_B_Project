@@ -9,9 +9,6 @@ def list_diary_screen(conn: Connection):
         user_id: int = st.session_state["user_id"]
         diaries = get_diary_entries(conn, user_id)
 
-        # 降順にソート
-        diaries = sorted(diaries, key=lambda x: x.date, reverse=True)
-
         st.title("日記一覧")
 
         # 検索ボックスを追加
@@ -20,6 +17,9 @@ def list_diary_screen(conn: Connection):
         if not diaries:
             st.write("日記がありません。")
         else:
+            # 降順にソート
+            diaries = sorted(diaries, key=lambda x: x.date, reverse=True)
+
             # 検索キーワードでフィルタリング
             filtered_diaries = [diary for diary in diaries if search_term.lower() in diary.content.lower()]
 

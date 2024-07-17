@@ -14,9 +14,11 @@ def generate_wordcloud(weekly_content: str):
 
     token = Tokenizer()
     for token in token.tokenize(weekly_content):
-        word_type = token.part_of_speech.split(",")[0]
+        word_type: str = token.part_of_speech.split(",")[0]
         if word_type in "名詞":
-            word_list.append(token.surface)
+            word: str = token.surface
+            print(word)
+            word_list.append(word)
 
     # 抽出した名詞を空白区切りで連結
     word_chain = " ".join(word_list)

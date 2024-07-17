@@ -20,27 +20,30 @@ def add_diary_entry(conn: Connection, diary: Diary):
     conn.commit()
 
 
-def get_diary_entries(conn: Connection, user_id: int) -> List[Diary]:
+def get_diary_entries(conn: Connection, user_id: int) -> List[Diary] | None:
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM diaries WHERE user_id=?", (f"{user_id}"))
     rows = cursor.fetchall()
     diaries = []
-    for row in rows:
-        diary = Diary(
-            id=row[0],
-            user_id=row[1],
-            date=datetime.strptime(row[2], "%Y-%m-%d").date(),
-            icon=row[3],
-            content=row[4],
-            sleep_start=datetime.strptime(row[5], "%Y-%m-%d %H:%M:%S"),
-            sleep_end=datetime.strptime(row[6], "%Y-%m-%d %H:%M:%S"),
-            create_at=row[7],
-        )
-        diaries.append(diary)
-    return diaries
+    if rows:
+        for row in rows:
+            diary = Diary(
+                id=row[0],
+                user_id=row[1],
+                date=datetime.strptime(row[2], "%Y-%m-%d").date(),
+                icon=row[3],
+                content=row[4],
+                sleep_start=datetime.strptime(row[5], "%Y-%m-%d %H:%M:%S"),
+                sleep_end=datetime.strptime(row[6], "%Y-%m-%d %H:%M:%S"),
+                create_at=row[7],
+            )
+            diaries.append(diary)
+        return diaries
+    else:
+        return None
 
 
-def get_diary_by_date(conn: Connection, user_id: int, date: date) -> Optional[Diary]:
+def get_diary_by_date(conn: Connection, user_id: int, date: date) -> Optional[Diary] | None:
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM diaries WHERE user_id=? AND date=?", (f"{user_id}", f"{date}"))
     row = cursor.fetchone()

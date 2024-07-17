@@ -15,17 +15,18 @@ def diary_calendar_screen(conn: Connection):
         diaries: List[Diary] = get_diary_entries(conn, user_id)
         events: List[Dict[str, Any]] = []
 
-        for diary in diaries:
-            events.append(
-                {
-                    "id": diary.id,
-                    "title": diary.icon,
-                    "start": diary.date.strftime("%Y-%m-%dT%H:%M:%S"),
-                    "allDay": True,
-                    "color": "#00000000",
-                    "backgroundColor": "#00000000",
-                }
-            )
+        if diaries:
+            for diary in diaries:
+                events.append(
+                    {
+                        "id": diary.id,
+                        "title": diary.icon,
+                        "start": diary.date.strftime("%Y-%m-%dT%H:%M:%S"),
+                        "allDay": True,
+                        "color": "#00000000",
+                        "backgroundColor": "#00000000",
+                    }
+                )
 
         css = """
                 <style>
