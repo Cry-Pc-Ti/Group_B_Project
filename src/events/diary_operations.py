@@ -1,6 +1,5 @@
 from datetime import date, datetime
 from sqlite3 import Connection
-from typing import List, Optional
 from models.diary import Diary
 
 
@@ -20,9 +19,9 @@ def add_diary_entry(conn: Connection, diary: Diary):
     conn.commit()
 
 
-def get_diary_entries(conn: Connection, user_id: int) -> List[Diary] | None:
+def get_diary_entries(conn: Connection, user_id: int):
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM diaries WHERE user_id=?", (f"{user_id}"))
+    cursor.execute("SELECT * FROM diaries WHERE user_id=?", (user_id,))
     rows = cursor.fetchall()
     diaries = []
     if rows:
@@ -43,9 +42,15 @@ def get_diary_entries(conn: Connection, user_id: int) -> List[Diary] | None:
         return None
 
 
-def get_diary_by_date(conn: Connection, user_id: int, date: date) -> Optional[Diary] | None:
+def get_diary_by_date(conn: Connection, user_id: int, date: date):
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM diaries WHERE user_id=? AND date=?", (f"{user_id}", f"{date}"))
+    cursor.execute(
+        "SELECT * FROM diaries WHERE user_id=? AND date=?",
+        (
+            user_id,
+            date,
+        ),
+    )
     row = cursor.fetchone()
     if row:
         return Diary(
@@ -58,4 +63,5 @@ def get_diary_by_date(conn: Connection, user_id: int, date: date) -> Optional[Di
             sleep_end=datetime.strptime(row[6], "%Y-%m-%d %H:%M:%S"),
             create_at=row[7],
         )
-    return None
+    else:
+        return None
