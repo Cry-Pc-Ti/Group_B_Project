@@ -48,13 +48,13 @@ def wordcloud_screen(conn):
 
             # 名詞が含まれていない場合は警告を表示
             if wordcloud is None:
-                st.warning("解析できませんでした")
+                st.warning("生成可能なデータがありません")
                 st.stop()
 
             is_loaded = True
 
         else:
-            st.warning("今週の日記がありません")
+            st.warning("生成可能なデータがありません")
             st.stop()
 
     if is_loaded:

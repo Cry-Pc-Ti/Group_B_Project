@@ -9,7 +9,7 @@ def load_stopwords():
     return set(noun_stopwords)
 
 
-def generate_wordcloud(weekly_content: str):
+def generate_wordcloud(weekly_content: str) -> plt:
     word_list = []
 
     token = Tokenizer()

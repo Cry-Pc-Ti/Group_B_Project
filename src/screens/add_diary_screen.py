@@ -1,3 +1,4 @@
+import locale
 import streamlit as st
 from datetime import date, datetime, time, timedelta
 from models.diary import Diary
@@ -33,9 +34,11 @@ def add_diary_screen(conn):
                     st.rerun()
 
         # 日記の内容を入力
-        st.title(selected_date.strftime("%Y/%m/%d"))
+        locale.setlocale(locale.LC_TIME, "en_US.utf8")
+        format_date = f"{selected_date.strftime('%m/%d')} ({selected_date.strftime('%a')})"
+        st.title(format_date)
 
-        icon = st.selectbox("感情", ["🥰", "😊", "😑", "😓", "😥"])
+        icon = st.selectbox("感情", ["🥰", "😊", "😑", "😥", "😓"])
 
         content = st.text_area("内容")
 
