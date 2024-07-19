@@ -20,7 +20,7 @@ def add_diary_screen(conn):
         # ボタンを配置
         col1, col2, col3 = st.columns([6, 1, 1])
         with col1:
-            back_button = st.button("一覧に戻る")
+            back_button = st.button("カレンダーに戻る")
             if back_button:
                 back_to_calendar()
         with col2:
@@ -35,7 +35,7 @@ def add_diary_screen(conn):
 
         # 日記の内容を入力
         locale.setlocale(locale.LC_TIME, "en_US.utf8")
-        format_date = f"{selected_date.strftime('%m/%d')} ({selected_date.strftime('%a')})"
+        format_date = f"{selected_date.strftime('%Y/%m/%d')} ({selected_date.strftime('%a')})"
         st.title(format_date)
 
         icon = st.selectbox("感情", ["🥰", "😊", "😑", "😥", "😓"])

@@ -65,7 +65,7 @@ def weekly_analysis_screen(conn: Connection):
             ax1.set_ylabel("睡眠時間 (時間)", font="MS Gothic")
             ax1.bar(format_dates, sleep_times, color=ax1_color, alpha=0.4)
             ax1.tick_params(axis="y", labelcolor=ax1_color)
-            ax1.set_ylim(0, 12)
+            ax1.set_ylim(0, 12.5)
 
             # 感情スコアのプロット
             ax2 = ax1.twinx()
@@ -73,10 +73,10 @@ def weekly_analysis_screen(conn: Connection):
             ax2.set_ylabel("感情スコア", font="MS Gothic")
             ax2.plot(format_dates, scores, marker="o", color=ax2_color)
             ax2.tick_params(axis="y", labelcolor=ax2_color)
-            ax2.set_ylim(0, 5)
+            ax2.set_ylim(0, 5.5)
 
             # グラフのタイトルとレイアウト
-            plt.title("今週の感情スコアと睡眠時間", font="MS Gothic")
+            plt.title("睡眠時間と感情スコア", font="MS Gothic")
             fig.tight_layout()
             st.pyplot(fig)
 

@@ -1,3 +1,4 @@
+import locale
 import streamlit as st
 from datetime import date, datetime, time, timedelta
 from sqlite3 import Connection
@@ -33,7 +34,7 @@ def view_diary_screen(conn: Connection):
         # ボタンを配置
         col1, col2, col3 = st.columns([6, 1, 1])
         with col1:
-            back_button = st.button("一覧に戻る")
+            back_button = st.button("カレンダーに戻る")
             if back_button:
                 back_to_calendar()
         with col2:
@@ -47,7 +48,9 @@ def view_diary_screen(conn: Connection):
                     st.rerun()
 
         # 日記の内容を表示
-        st.title(selected_date.strftime("%Y/%m/%d"))
+        locale.setlocale(locale.LC_TIME, "en_US.utf8")
+        format_date = f"{selected_date.strftime('%Y/%m/%d')} ({selected_date.strftime('%a')})"
+        st.title(selected_date.strftime(format_date))
 
         diary = get_diary_by_date(conn, user_id, selected_date)
         if diary:
