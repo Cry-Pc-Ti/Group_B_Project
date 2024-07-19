@@ -9,15 +9,22 @@ def load_stopwords():
     return set(noun_stopwords)
 
 
-def generate_wordcloud(weekly_content: str) -> plt:
+def generate_wordcloud(weekly_content: str):
     word_list = []
 
-    token = Tokenizer()
-    for token in token.tokenize(weekly_content):
-        word_type: str = token.part_of_speech.split(",")[0]
-        if word_type in "名詞":
-            word: str = token.surface
-            print(word)
+    tokenizer = Tokenizer()
+
+    symbol_settings = list(tokenizer.sys_dic.unknowns["SYMBOL"][0])
+    symbol_settings[3] = "記号,一般,*,*"
+    tokenizer.sys_dic.unknowns["SYMBOL"][0] = symbol_settings
+
+    for tokenizer in tokenizer.tokenize(weekly_content):
+        word_type: str = tokenizer.part_of_speech.split(",")[0]
+        test = tokenizer.part_of_speech.split(",")[1]
+        is_number = tokenizer.part_of_speech.split(",")[1] == "数"
+        if word_type in "名詞" and not is_number:
+            word: str = tokenizer.surface
+            print(word_type, test, word)
             word_list.append(word)
 
     # 抽出した名詞を空白区切りで連結

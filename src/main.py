@@ -1,15 +1,5 @@
 import streamlit as st
-from datetime import datetime, timedelta
 from PIL import Image
-from events.database import create_connection, create_user_tables, create_diary_tables
-from screens.list_diary_screen import list_diary_screen
-from screens.login_screen import login_screen
-from screens.register_screen import register_screen
-from screens.add_diary_screen import add_diary_screen
-from screens.view_diary_screen import view_diary_screen
-from screens.calendar_screen import diary_calendar_screen
-from screens.weekly_analysis_screen import weekly_analysis_screen
-from screens.wordcloud_screen import wordcloud_screen
 
 # グローバル変数を使用して、初回実行フラグを管理
 if "INITIAL_RUN" not in globals():
@@ -21,6 +11,18 @@ else:
 if INITIAL_RUN:
     st.set_page_config(page_title=":)iary", page_icon=Image.open("static/img/icon.png"), initial_sidebar_state="auto")
     INITIAL_RUN = False
+
+from datetime import datetime, timedelta
+from events.database import create_connection, create_user_tables, create_diary_tables
+from screens.list_diary_screen import list_diary_screen
+from screens.login_screen import login_screen
+from screens.register_screen import register_screen
+from screens.add_diary_screen import add_diary_screen
+from screens.view_diary_screen import view_diary_screen
+from screens.calendar_screen import diary_calendar_screen
+from screens.weekly_analysis_screen import weekly_analysis_screen
+from screens.wordcloud_screen import wordcloud_screen
+
 
 # データベース接続とテーブル作成
 user_conn = create_connection("user")
