@@ -24,7 +24,6 @@ def generate_wordcloud(weekly_content: str):
         is_number = tokenizer.part_of_speech.split(",")[1] == "数"
         if word_type in "名詞" and not is_number:
             word: str = tokenizer.surface
-            print(word_type, test, word)
             word_list.append(word)
 
     # 抽出した名詞を空白区切りで連結
