@@ -18,11 +18,24 @@ def list_diary_screen(conn: Connection):
         search_term = st.text_input("検索", value="", placeholder="キーワードを入力してください")
 
         # 日付絞り込み
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns([2, 2, 1])
         with col1:
-            start_date = st.date_input("開始日", value=datetime.date.today() - datetime.timedelta(days=30))
+            if "start_date" not in st.session_state:
+                st.session_state["start_date"] = datetime.date.today() - datetime.timedelta(days=30)
+            start_date = st.date_input("開始日", value=st.session_state["start_date"])
+
         with col2:
-            end_date = st.date_input("終了日", value=datetime.date.today())
+            if "end_date" not in st.session_state:
+                st.session_state["end_date"] = datetime.date.today()
+            end_date = st.date_input("終了日", value=st.session_state["end_date"])
+
+        with col3:
+            st.write("")
+            st.write("")
+            if st.button("クリア"):
+                st.session_state["start_date"] = None
+                st.session_state["end_date"] = None
+                st.experimental_rerun()
 
         if not diaries:
             st.write("日記がありません。")
@@ -34,7 +47,9 @@ def list_diary_screen(conn: Connection):
             filtered_diaries = [
                 diary
                 for diary in diaries
-                if search_term.lower() in diary.content.lower() and start_date <= diary.date <= end_date
+                if search_term.lower() in diary.content.lower()
+                and (st.session_state["start_date"] is None or start_date <= diary.date)
+                and (st.session_state["end_date"] is None or diary.date <= end_date)
             ]
 
             if not filtered_diaries:
