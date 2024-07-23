@@ -27,7 +27,7 @@ def main_screen(c):
 
         if st.form_submit_button("Submit"):
             if not text:
-                st.warning("Please input any text.")
+                st.error("Please input any text.")
                 st.stop()
             content(c,text)
             st.success("complete")

@@ -3,7 +3,14 @@ import streamlit as st
 from events.login import login
 
 def login_screen(conn):
-    st.title("Login")
+    
+    col1,col2 = st.columns([7,1])
+    with col1:
+        st.title("Login")
+    with col2:
+        if st.button("Register"):
+            st.session_state["screen"] = "register"
+            st.rerun()
 
     id = st.text_input("id")
     password = st.text_input("password", type="password")
@@ -14,7 +21,3 @@ def login_screen(conn):
             st.rerun()
         else:
             st.error("error")
-
-    if st.button("Register"):
-        st.session_state["screen"] = "register"
-        st.rerun()
