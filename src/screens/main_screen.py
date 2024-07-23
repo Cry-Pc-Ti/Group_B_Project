@@ -8,7 +8,7 @@ c = sqlite3.connect("static/db/content.db")
 content_db(c)
 
 def main_screen(c):
-    st.title("title")
+    st.header("Contents", divider="red")
 
     col1,col2 = st.columns([5,1])
     with col1:
