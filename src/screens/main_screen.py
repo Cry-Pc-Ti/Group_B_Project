@@ -10,18 +10,24 @@ content_db(c)
 def main_screen(c):
     st.title("title")
 
-    if st.button("Logout"):
-        st.session_state["screen"] = "login"
-        st.rerun()
+    col1,col2 = st.columns([5,1])
+    with col1:
+        if st.button("WordCloud"):
+            st.session_state["screen"] = "word"
+            st.rerun()
+
+    with col2:
+        if st.button("Logout"):
+            st.session_state["screen"] = "login"
+            st.rerun()
 
     # 文章入力
     with st.form("contents", clear_on_submit=True):
         text = st.text_area("contents")
 
         if st.form_submit_button("Submit"):
+            if not text:
+                st.warning("Please input any text.")
+                st.stop()
             content(c,text)
             st.success("complete")
-
-    if st.button("WordCloud"):
-        st.session_state["screen"] = "word"
-        st.rerun()

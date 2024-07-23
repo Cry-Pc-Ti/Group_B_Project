@@ -5,6 +5,7 @@ from events.db import content_db, user_db
 from screens.login_screen import login_screen
 from screens.main_screen import main_screen
 from screens.word_screen import word_screen
+from screens.register_screen import register_screen
 
 conn = sqlite3.connect("static/db/user.db")
 user_db(conn)
@@ -22,8 +23,11 @@ def main():
     if st.session_state["screen"] == "main":
         main_screen(c)
     
-    elif st.session_state["screen"] == "word":
+    if st.session_state["screen"] == "word":
         word_screen(c)
+    
+    elif st.session_state["screen"] == "register":
+        register_screen(conn)
 
 if __name__ == "__main__":
     main()
